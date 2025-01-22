@@ -5,10 +5,10 @@ A modern, responsive web application built with Next.js that allows users to exp
 ## Screenshots
 
 ### API List View
-![Dashboard View](public/screenshot1.png)
+![Dashboard View](public/screenshot2.png)
 
 ### Dashboard View
-![API List View](public/screenshot2.png)
+![API List View](public/screenshot1.png)
 
 ## Features
 
