@@ -1,10 +1,10 @@
 import React from 'react'
 import Link from 'next/link'
-import fs from 'fs/promises'
-import path from 'path'
 import { TabsContainer } from '@/components/TabsContainer'
-import { parseAPIs, paginateAPIs } from '@/utils/parseAPIs'
+import { transformAPIsGuruData, paginateAPIs } from '@/utils/parseAPIs'
 import { SearchBar } from '@/components/SearchBar'
+import type { APIsGuruResponse } from '@/types/api'
+import { unstable_noStore as noStore } from 'next/cache'
 
 const PAGE_SIZE = 10
 
@@ -13,14 +13,26 @@ interface PageProps {
 }
 
 export default async function Home({ searchParams }: PageProps) {
+  noStore()
+
   const params = await searchParams
   const currentPage = Math.max(1, Number(typeof params.page === 'string' ? params.page : 1))
   const searchQuery = typeof params.search === 'string' ? params.search : ''
   const categoryFilter = typeof params.category === 'string' ? params.category : ''
   
-  const markdownPath = path.join(process.cwd(), 'test.md')
-  const markdown = await fs.readFile(markdownPath, 'utf-8')
-  const allAPIs = parseAPIs(markdown)
+  const response = await fetch('https://api.apis.guru/v2/list.json', {
+    cache: 'no-store',
+    next: {
+      revalidate: 0
+    }
+  })
+  
+  if (!response.ok) {
+    throw new Error('Failed to fetch APIs')
+  }
+
+  const data: APIsGuruResponse = await response.json()
+  const allAPIs = transformAPIsGuruData(data)
   
   const categories = Array.from(new Set(allAPIs.map(api => api.category))).sort()
   

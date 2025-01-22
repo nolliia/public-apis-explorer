@@ -1,6 +1,6 @@
 # Public APIs Explorer
 
-A modern, responsive web application built with Next.js that allows users to explore and search through a collection of public APIs. The application provides an intuitive interface for discovering APIs, with detailed information about each API's features, authentication requirements, and more.
+A modern, responsive web application built with Next.js that allows users to explore and search through APIs from the APIs.guru directory. The application provides an intuitive interface for discovering APIs, with detailed information about each API's features, documentation, and more.
 
 ## Screenshots
 
@@ -13,13 +13,13 @@ A modern, responsive web application built with Next.js that allows users to exp
 ## Features
 
 - 🔍 **Smart Search**: Search APIs by name, description, or category
-- 🏷️ **Category Filtering**: Filter APIs by their categories with an easy-to-use dropdown
+- 🏷️ **Category Filtering**: Filter APIs by their categories
 - 📊 **Dashboard View**: Visual representation of API statistics including:
-  - Total number of APIs
-  - Category distribution
-  - Authentication types
-  - CORS support
-  - HTTPS usage
+  - Total number of APIs and Categories
+  - Recently Added/Updated APIs
+  - APIs with Logos and Contact Information
+  - APIs with External Documentation
+  - OpenAPI Version Distribution
 - 📱 **Responsive Design**: Fully responsive layout that works on desktop and mobile devices
 - 🌓 **Dark Mode Support**: Built-in dark mode for better viewing experience
 - 📄 **Pagination**: Efficient pagination system for handling large datasets
@@ -27,12 +27,12 @@ A modern, responsive web application built with Next.js that allows users to exp
 
 ## Tech Stack
 
-- **Framework**: Next.js 15 (App Router)
+- **Framework**: Next.js 15 with App Router
 - **Styling**: Tailwind CSS
-- **UI Components**: Radix UI
 - **Icons**: Heroicons
-- **Data Source**: Markdown file parsing
-
+- **Data Source**: APIs.guru Directory
+- **Testing**: Jest & React Testing Library
+- **Type Safety**: TypeScript
 ## Getting Started
 
 ### Prerequisites
@@ -80,51 +80,34 @@ public-apis-explorer/
 │   │   ├── APIList.tsx     # API list component
 │   │   ├── Dashboard.tsx   # Dashboard component
 │   │   ├── SearchBar.tsx   # Search component
-│   │   ├── TabsContainer.tsx # Navigation tabs
+│   │   └── TabsContainer.tsx # Navigation tabs
 │   │   └── CategoryFilter.tsx # Category filter
+
 │   ├── types/             # TypeScript type definitions
 │   │   └── api.ts         # API interface definitions
 │   └── utils/             # Utility functions
-│       └── parseAPIs.ts   # Markdown parsing utility
+│       ├── formatDate.ts  # Date formatting utility
+│       └── parseAPIs.ts   # APIs.guru data transformation
 ├── public/                # Static assets
-├── test.md               # APIs data source
 ├── tailwind.config.js    # Tailwind CSS configuration
 ├── next.config.js        # Next.js configuration
 ├── tsconfig.json         # TypeScript configuration
 ├── package.json          # Project dependencies and scripts
 └── jest.config.js        # Jest test configuration
-
 ```
 
-### Key Files and Directories
+## Getting Started
 
-#### Configuration Files
-- `next.config.js`: Next.js configuration including build settings and environment variables
-- `tailwind.config.js`: Tailwind CSS theme customization and plugin configuration
-- `tsconfig.json`: TypeScript compiler options and path aliases
-- `package.json`: Project metadata, dependencies, and npm scripts
-
-#### Source Code
-- `src/app/`: Next.js 15 app router pages and layouts
-- `src/components/`: Reusable React components
-- `src/types/`: TypeScript interfaces and type definitions
-- `src/utils/`: Helper functions and utilities
-
-#### Data
-- `test.md`: Main data source containing all API information in markdown format
-
-#### Testing
-- `jest.config.js`: Jest configuration for testing
-- `src/__tests__/`: Test files organized by component and utility
-
-## Key Components
-
-- `TabsContainer`: Main navigation component with API List and Dashboard views
-- `APIList`: Displays paginated list of APIs with search and filtering
-- `Dashboard`: Shows statistical information about the APIs
-- `APIDetails`: Detailed view of individual API information
-- `SearchBar`: Global search functionality
-- `CategoryFilter`: Category-based filtering component
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Run the development server:
+   ```bash
+   npm run dev
+   ```
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
 ## Testing
 

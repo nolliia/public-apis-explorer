@@ -7,20 +7,26 @@ const mockApis: API[] = [
   {
     name: 'Test API 1',
     description: 'First test API',
-    auth: 'apiKey',
-    https: true,
-    cors: 'yes',
+    version: '1.0.0',
+    added: '2024-01-01',
+    updated: '2024-01-01',
     url: 'https://test1.com',
-    category: 'Test'
+    category: 'Test',
+    openapiVersion: '3.0.0',
+    swaggerUrl: 'https://test1.com/swagger.json',
+    swaggerYamlUrl: 'https://test1.com/swagger.yaml'
   },
   {
     name: 'Test API 2',
     description: 'Second test API',
-    auth: '',
-    https: false,
-    cors: 'no',
+    version: '1.0.0',
+    added: '2024-01-01',
+    updated: '2024-01-01',
     url: 'https://test2.com',
-    category: 'Development'
+    category: 'Development',
+    openapiVersion: '3.0.0',
+    swaggerUrl: 'https://test2.com/swagger.json',
+    swaggerYamlUrl: 'https://test2.com/swagger.yaml'
   }
 ]
 
@@ -47,12 +53,6 @@ describe('APIList', () => {
       expect(screen.getByText(api.category)).toBeInTheDocument()
     })
 
-    expect(screen.getByText('Auth: apiKey')).toBeInTheDocument()
-    expect(screen.getByText('Auth: None')).toBeInTheDocument()
-    expect(screen.getByText('HTTPS: Yes')).toBeInTheDocument()
-    expect(screen.getByText('HTTPS: No')).toBeInTheDocument()
-    expect(screen.getByText('CORS: yes')).toBeInTheDocument()
-    expect(screen.getByText('CORS: no')).toBeInTheDocument()
   })
 
   it('renders pagination correctly', () => {

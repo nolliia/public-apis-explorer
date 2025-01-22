@@ -1,34 +1,31 @@
-import type { API } from '@/types/api'
+import type { API, APIsGuruResponse } from '@/types/api'
 
-export function parseAPIs(markdown: string): API[] {
+export function transformAPIsGuruData(data: APIsGuruResponse): API[] {
   const apis: API[] = []
-  const lines = markdown.split('\n')
-  let currentCategory = ''
 
-  for (const line of lines) {
-    if (line.startsWith('### ')) {
-      currentCategory = line.replace('### ', '').trim()
-      continue
+  for (const [apiId, apiData] of Object.entries(data)) {
+    const preferredVersion = apiData.versions[apiData.preferred]
+    if (!preferredVersion) continue
+
+    const [provider] = apiId.split(':')
+    
+    const api: API = {
+      name: preferredVersion.info.title,
+      description: preferredVersion.info.description || 'No description available',
+      version: preferredVersion.info.version,
+      added: apiData.added,
+      updated: preferredVersion.updated,
+      url: preferredVersion.info.contact?.url || preferredVersion.swaggerUrl,
+      category: provider,
+      logo: preferredVersion.info['x-logo']?.url,
+      contact: preferredVersion.info.contact,
+      openapiVersion: preferredVersion.openapiVer || 'Unknown',
+      swaggerUrl: preferredVersion.swaggerUrl,
+      swaggerYamlUrl: preferredVersion.swaggerYamlUrl,
+      externalDocs: preferredVersion.externalDocs
     }
 
-    if (line.startsWith('| [')) {
-      const parts = line.split('|').map(part => part.trim())
-      if (parts.length >= 6) {
-        const nameMatch = parts[1].match(/\[(.*?)\]\((.*?)\)/)
-        if (nameMatch) {
-          const api: API = {
-            name: nameMatch[1],
-            url: nameMatch[2],
-            description: parts[2],
-            auth: parts[3].replace('`', '').replace('`', ''),
-            https: parts[4].toLowerCase() === 'yes',
-            cors: parts[5],
-            category: currentCategory
-          }
-          apis.push(api)
-        }
-      }
-    }
+    apis.push(api)
   }
 
   return apis

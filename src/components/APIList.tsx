@@ -2,14 +2,28 @@
 
 import React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import type { API } from '@/types/api'
+import { formatDate } from '@/utils/formatDate'
 
 interface APIListProps {
   apis: API[]
   currentPage: number
   totalPages: number
   onPageChange: (page: number) => void
+}
+
+function truncateDescription(description: string, maxLines: number = 3): string {
+  const words = description.split(' ')
+  const averageWordsPerLine = 12
+  const maxWords = averageWordsPerLine * maxLines
+  
+  if (words.length <= maxWords) {
+    return description
+  }
+  
+  return words.slice(0, maxWords).join(' ') + '...'
 }
 
 export function APIList({ apis, currentPage, totalPages, onPageChange }: APIListProps) {
@@ -55,21 +69,35 @@ export function APIList({ apis, currentPage, totalPages, onPageChange }: APIList
           >
             <div className="flex justify-between items-start">
               <div className="flex-1 mr-4">
-                <h3 className="text-xl font-semibold text-primary-peach mb-2 dark:text-primary-light">
-                  {api.name}
-                </h3>
-                <p className="text-primary-light/80 mb-4 dark:text-white/80">
-                  {api.description}
+                <div className="flex items-center gap-4 mb-2">
+                  <div className="w-8 h-8 relative">
+                    <Image
+                      src={api.logo || '/globe.svg'}
+                      alt={`${api.name} logo`}
+                      fill
+                      className="object-contain"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = '/globe.svg';
+                      }}
+                    />
+                  </div>
+                  <h3 className="text-xl font-semibold text-primary-peach dark:text-primary-light">
+                    {api.name}
+                  </h3>
+                </div>
+                <p className="text-primary-light/80 mb-4 dark:text-white/80 line-clamp-3">
+                  {truncateDescription(api.description)}
                 </p>
                 <div className="flex flex-wrap gap-4 text-sm">
-                  <span className="px-2 py-1 bg-primary-purple/20 rounded dark:bg-white/10" role="status">
-                    Auth: {api.auth || 'None'}
+                  <span className="px-2 py-1 bg-primary-purple/20 rounded dark:bg-white/10">
+                    Version: {api.version}
                   </span>
-                  <span className="px-2 py-1 bg-primary-purple/20 rounded dark:bg-white/10" role="status">
-                    HTTPS: {api.https ? 'Yes' : 'No'}
+                  <span className="px-2 py-1 bg-primary-purple/20 rounded dark:bg-white/10">
+                    OpenAPI: {api.openapiVersion}
                   </span>
-                  <span className="px-2 py-1 bg-primary-purple/20 rounded dark:bg-white/10" role="status">
-                    CORS: {api.cors}
+                  <span className="px-2 py-1 bg-primary-purple/20 rounded dark:bg-white/10">
+                    Updated: {formatDate(api.updated)}
                   </span>
                 </div>
               </div>
